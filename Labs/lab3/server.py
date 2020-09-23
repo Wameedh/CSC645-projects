@@ -14,6 +14,7 @@
 # don't modify this imports.
 import socket
 import pickle
+import sys
 from threading import Thread
 
 class Server(object):
@@ -34,7 +35,7 @@ class Server(object):
         """
         self.host = host
         self.port = port
-        self.serversocket = None # TODO: create the server socket
+        self.serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # TODO: create the server socket
         self.client_handlers = {} # initializes client_handlers list
 
     def _bind(self):
@@ -42,7 +43,7 @@ class Server(object):
         # TODO: bind host and port to this server socket
         :return: VOID
         """
-        pass #remove this line after implemented.
+        self.serversocket.bind((self.host, self.port))
 
     def _listen(self):
         """
@@ -53,9 +54,12 @@ class Server(object):
         try:
             self._bind()
             # your code here
-        except:
+            self.serversocket.listen(self.MAX_NUM_CONN)
+            print("Listening at " + self.host + "/" + str(self.port))
+        except socket.error as e:
+            print("Error while listening for client %s" % e)
             self.serversocket.close()
-
+            sys.exit(1)
     def _handler(self, clienthandler):
         """
         #TODO: receive, process, send response to the client using this handler.
@@ -66,7 +70,17 @@ class Server(object):
              # TODO: receive data from client
              # TODO: if no data, break the loop
              # TODO: Otherwise, send acknowledge to client. (i.e a message saying 'server got the data
-             pass  # remove this line after implemented.
+             deserialized_data = self.receive(clienthandler)
+             if not deserialized_data:
+                 break
+             message = "Server got the data!"
+             self.send(clienthandler, message)
+             student_name = deserialized_data['student_name']
+             github_username = deserialized_data['github_username']
+             sid = deserialized_data['sid']
+             log = "Connected: Student: " + student_name + ", Github Username: " + github_username + ", sid: " + str(sid)
+             print(log)
+
 
     def _accept_clients(self):
         """
@@ -78,10 +92,14 @@ class Server(object):
                clienthandler, addr = self.serversocket.accept()
                # TODO: from the addr variable, extract the client id assigned to the client
                # TODO: send assigned id to the new client. hint: call the send_clientid(..) method
+               client_id = addr[1]
+               self._send_clientid(clienthandler, client_id)
                self._handler(clienthandler) # receive, process, send response to client.
-            except:
+            except socket.error as e:
                # handle exceptions here
-               pass #remove this line after implemented.
+               print("Error accepting client %s" % e)
+               self.serversocket.close()
+               sys.exit(1)
 
     def _send_clientid(self, clienthandler, clientid):
         """
@@ -90,7 +108,8 @@ class Server(object):
         :param clientid:
         :return: VOID
         """
-        pass  # remove this line after implemented.
+        client_id = {'clientid': clientid}
+        self.send(clienthandler, client_id)
 
 
     def send(self, clienthandler, data):
@@ -101,7 +120,13 @@ class Server(object):
         :param data: raw data (not serialized yet)
         :return: VOID
         """
-        pass #remove this line after implemented.
+        serialized_data = pickle.dumps(data)
+        try:
+            clienthandler.send(serialized_data)
+        except socket.error as e:
+            print("Error sending data %s" % e)
+            self.serversocket.close()
+            sys.exit(1)
 
     def receive(self, clienthandler, MAX_ALLOC_MEM=4096):
         """
@@ -109,7 +134,15 @@ class Server(object):
         :param MAX_ALLOC_MEM: default set to 4096
         :return: the deserialized data.
         """
-        return None #change the return value after implemente.
+        try:
+            data_from_client = clienthandler.recv(MAX_ALLOC_MEM)
+        except socket.error as e:
+            print("Error receiving data %s" % e)
+            self.serversocket.close()
+            sys.exit(1)
+        if len(data_from_client) == 0:
+            return None
+        return pickle.loads(data_from_client)
 
     def run(self):
         """
