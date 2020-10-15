@@ -10,7 +10,7 @@
 #                   the client does not know which services the server provides until the
 #                   clients creates a connection.
 # Running:          This class is dependent of other classes.
-# Usage :           menu = Menu() # creates object
+# Usage :           menu = Menu(client) # creates object
 #
 ########################################################################################
 
@@ -32,37 +32,6 @@ class Menu(object):
         """
         self.client = client
 
-    def set_client(self, client):
-        self.client = client
-
-    def show_menu(self):
-        """
-        TODO: 3. print the menu in client console.
-        :return: VOID
-        """
-        pass
-
-    def process_user_data(self):
-        """
-        TODO: according to the option selected by the user, prepare the data that will be sent to the server.
-        :param option:
-        :return: VOID
-        """
-        data = {}
-        option = self.option_selected()
-        if 1 <= option <= 6: # validates a valid option
-           # TODO: implement your code here
-           # (i,e  algo: if option == 1, then data = self.menu.option1, then. send request to server with the data)
-           pass
-
-    def option_selected(self):
-        """
-        TODO: takes the option selected by the user in the menu
-        :return: the option selected.
-        """
-        option = 0
-        # TODO: your code here.
-        return option
 
     def get_menu(self):
         """
@@ -71,79 +40,23 @@ class Menu(object):
         -----------------------
         Options Available:
         1. Get user list
-        2. Sent a message
+        2. Send a message
         3. Get my messages
         4. Create a new channel
         5. Chat in a channel with your friends
         6. Disconnect from server
         :return: a string representing the above menu.
         """
-        menu = ""
-        # TODO: implement your code here
+        menu = "\n****** TCP Message App ******\n\
+-----------------------\n\
+Options Available:\n\
+1. Get user list\n\
+2. Send a message\n\
+3. Get my messages\n\
+4. Create a new chat room\n\
+5. Join an existing chat room\n\
+6. Disconnect from server\n"
+
         return menu
 
-    def option1(self):
-        """
-        TODO: Prepare the user input data for option 1 in the menu
-        :param option:
-        :return: a python dictionary with all the data needed from user in option 1.
-        """
-        data = {}
-        data['option'] = 1
-        # Your code here.
-        return data
 
-    def option2(self):
-        """
-        TODO: Prepare the user input data for option 2 in the menu
-        :param option:
-        :return: a python dictionary with all the data needed from user in option 2.
-        """
-        data = {}
-        data['option'] = 2
-        # Your code here.
-        return data
-
-    def option3(self):
-        """
-        TODO: Prepare the user input data for option 3 in the menu
-        :param option:
-        :return: a python dictionary with all the data needed from user in option 3.
-        """
-        data = {}
-        data['option'] = 3
-        # Your code here.
-        return data
-
-    def option4(self):
-        """
-        TODO: Prepare the user input data for option 4 in the menu
-        :param option:
-        :return: a python dictionary with all the data needed from user in option 4.
-        """
-        data = {}
-        data['option'] = 4
-        # Your code here.
-        return data
-
-    def option5(self):
-        """
-        TODO: Prepare the user input data for option 5 in the menu
-        :param option:
-        :return: a python dictionary with all the data needed from user in option 5.
-        """
-        data = {}
-        data['option'] = 5
-        # Your code here.
-        return data
-
-    def option6(self):
-        """
-        TODO: Prepare the user input data for option 6 in the menu
-        :param option:
-        :return: a python dictionary with all the data needed from user in option 6.
-        """
-        data = {}
-        data['option'] = 6
-        # Your code here.
-        return data

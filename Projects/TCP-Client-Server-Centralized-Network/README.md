@@ -2,12 +2,36 @@
 
 Please use this README file to provide the following documentation for this project:
 
-* Your name and student id
-* General description of the project (a few sentences)
-* If you used external Python modules/libraries. Provide a requirements.txt file  
-* Python version and compatibility issues (if any). Your project must be run exactly as in the running instructions described below in this file
-* Attach screenshots or videos to this file to illustrate how your program works for all the options in the menu. 
-* A few sentences about all the challenges you found during the implementation of this project and how you overcame them. Please be honest here. 
+**Name:** Wameedh Mohammed Ali
+
+**Student id:** 920678405
+
+**General description of the project**
+
+This a TCP project. There are are two components to it. The first one is the client side implementation and the second is the server side implementation.
+The client side has two files one is client.py and the second clinet_helper.py, these two files handle the client process of connecting to the server and making and receiving requests.
+The server side has four files, serve.py which create the server and start listing to client when they want to join. Here we creat the threading for clients.
+The client_handler.py is the file that run each client on its own thread and manages its requests.
+The menu.py is just a menu object that we user to to provide menu options for the client.
+Lastly the chatroom.py is an object that users can create. It stores a list of users connected to the chat room and the owner of the room info.
+It would also manages adding and removing users from the chat.
+  
+**Python version:** 3.8.5
+
+Attach screenshots or videos to this file to illustrate how your program works for all the options in the menu.
+ 
+****Below is a youtube link to video where I show my demo.****
+
+https://youtu.be/3Yp0JS7xSmk
+
+**Challenges:**
+
+In this assignment I had four challenges in my implementation. The first and biggest Challenge in this assignment was that I was trying to implement the same design as the professor had done.
+This was a bad idea because I struggled for more that half of the time trying to find out how the professor had done it rather than trying to think of what my solution would be.
+This was like solving a puzzle rather than thinking of a solution. Another challenge was in implementing the chat room and its process.
+It was simple conceptually but messy when it comes to code implementation.
+The third challenge was taking care of the race condition as I wasn't and still not completely sure about if I had taken care of all situations where race condition may occur.
+Lastly, it was time consuming to debug the project in order to get it done as expected and yet I am still not 100% confident with the implementation as I can for sure make it better but there is not much time. 
 
 ## Note that failure to provide the above docs will result in a 30% deduction in your final grade for this project. 
 

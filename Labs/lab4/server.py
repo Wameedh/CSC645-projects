@@ -14,7 +14,6 @@
 # don't modify this imports.
 import socket
 import pickle
-import sys
 from threading import Thread
 from client_handler import ClientHandler
 
@@ -60,7 +59,6 @@ class Server(object):
         except socket.error as e:
             print("Error while listening for client %s" % e)
             self.serversocket.close()
-            sys.exit(1)
 
     def threaded_client(self, clientsocket, addr):
         client_id = addr[1]
@@ -86,7 +84,6 @@ class Server(object):
                # handle exceptions here
                print("Error accepting client %s" % e)
                self.serversocket.close()
-               sys.exit(1)
 
     def _send_clientid(self, clienthandler, clientid):
         """
@@ -113,7 +110,6 @@ class Server(object):
         except socket.error as e:
             print("Error sending data %s" % e)
             self.serversocket.close()
-            sys.exit(1)
 
     def receive(self, clienthandler, MAX_ALLOC_MEM=4096):
         """
