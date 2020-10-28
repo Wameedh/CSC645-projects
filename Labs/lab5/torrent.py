@@ -1,6 +1,6 @@
 # Lab: 5
-# Author: <your name>
-# SID: <your student id>
+# Author: Wameedh Mohammed Ali
+# SID: 920678405
 # Description: in this lab students will learn how to extract decoded values from a bencoded torrent file
 # Implement all the methods marked as TODO
 
