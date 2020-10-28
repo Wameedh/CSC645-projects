@@ -47,7 +47,7 @@ class ClientHandler(object):
         sends the menu options to the client after the handshake between client and server is done.
         :return: VOID
         """
-        data = {'menu': self.menu_list}
+        data = {'menu': self.menu_list, 'option_selected': 7}
         self.send(data)
 
     def process_options(self):

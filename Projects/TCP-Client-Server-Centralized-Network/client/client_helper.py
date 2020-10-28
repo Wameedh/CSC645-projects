@@ -79,13 +79,15 @@ class ClientHelper(object):
             the server has sent a respond with the data
         """
         self.data = data
-        if 'option_selected' in data.keys() and 1 <= data['option_selected'] <= 6:  # validates a valid option selected
+        if 'option_selected' in data.keys() and 1 <= data['option_selected'] <= 7:  # validates a valid option selected
             option = data['option_selected']
 
             """
                 For option 1 to 3 we just need to print the payload coming from the server
             """
-            self.print_payload(self.data)
+            if data['option_selected'] != 7:
+                self.print_payload(self.data)
+
 
             if option == 4:
                 try:
