@@ -38,7 +38,9 @@ class Torrent:
               Note: must use the private method '_hash_torrent_info(...)' to hash the torrent_info
         :return: the SHA1 hash of the torrent info
         """
-        pass
+        torrent_info = repr(self.torrent_data['info']).encode('utf-8')
+        hashed_info = self._hash_torrent_info(torrent_info)
+        return hashed_info
 
     def validate_hash_info(self, info_hash):
         """
@@ -53,49 +55,52 @@ class Torrent:
         TODO: This method extracts the announce value from the torrent file
         :return: the announce value
         """
-        pass
+        return self.torrent_data['announce']
 
     def nodes(self):
         """
         TODO: This method extracts the nodes from the torrent file
         :return: the nodes list
         """
-        pass
+        return self.torrent_data['nodes']
 
     def creation_date(self):
         """
         TODO: This method extracts the creation_date value from the torrent file
         :return: the creation date value
         """
-        pass
+        creation_date = str(self.torrent_data['creation date'])
+        return creation_date
 
     def created_by(self):
         """
         TODO: This method extracts the created by value from the torrent file
         :return: the created by value
         """
-        pass
+        return self.torrent_data['created by']
 
     def file_name(self):
         """
         TODO: This method extracts the file_name value from the torrent file
         :return: the file name value
         """
-        pass
+        return self.torrent_data['info']['name']
 
     def file_length(self):
         """
         TODO: This method extracts the file length value from the torrent file
         :return: the length value
         """
-        pass
+        file_length = str(self.torrent_data['info']['length'])
+        return file_length
 
     def num_pieces(self):
         """
         TODO: This method extracts the num of pieces from the torrent file
         :return: the num of pieces
         """
-        pass
+        num_pieces = self.pieces()
+        return str(len(num_pieces))
 
     def pieces(self):
         """
@@ -103,7 +108,8 @@ class Torrent:
               Note: you don't need to hash the pieces. They are already hashed in the torrent file
         :return: a list of hashed pieces
         """
-        pass
+        pieces = self.torrent_data['info']['pieces']
+        return pieces
 
     def piece(self, index):
         """
@@ -112,14 +118,16 @@ class Torrent:
         :param index: the index of the piece
         :return: the hashed piece
         """
-        pass
+        pieces = self.pieces()
+        return pieces[index]
 
     def piece_length(self):
         """
         TODO: This method extracts the piece length from the torrent file
         :return: the piece length value
         """
-        pass
+        piece_length = str(self.torrent_data['info']['piece length'])
+        return piece_length
 
     def metainfo(self):
         """
@@ -127,14 +135,26 @@ class Torrent:
               Note: you MUST use the return of your methods to create the metainfo string
         :return: the torrent metainfo
         """
-        metainfo = ""
-        return metainfo
+        metainfo = self.comment() + "\n" +\
+                   self.announce() + "\n" +\
+                   self.info_hash()+"\n" +\
+                   self.file_name()+"\n" +\
+                   self.piece_length()+"\n" +\
+                   self.file_length()+"\n" +\
+                   str(self.pieces())+"\n" +\
+                   self.created_by()+"\n" +\
+                   self.creation_date()+"\n" +\
+                   self.num_pieces()+"\n" +\
+                   self.piece(0)
 
+
+
+
+        return metainfo
 
 
 # uncomment the following code for testing
 
-# torrent = Torrent("ages.torrent")
-# metainfo = torrent.metainfo()
-# print(metainfo)
-
+torrent = Torrent("age.torrent")
+metainfo = torrent.metainfo()
+print(metainfo)
