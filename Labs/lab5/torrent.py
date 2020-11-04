@@ -135,21 +135,17 @@ class Torrent:
               Note: you MUST use the return of your methods to create the metainfo string
         :return: the torrent metainfo
         """
-        metainfo = self.comment() + "\n" +\
-                   self.announce() + "\n" +\
-                   self.info_hash()+"\n" +\
-                   self.file_name()+"\n" +\
-                   self.piece_length()+"\n" +\
-                   self.file_length()+"\n" +\
-                   str(self.pieces())+"\n" +\
-                   self.created_by()+"\n" +\
-                   self.creation_date()+"\n" +\
-                   self.num_pieces()+"\n" +\
-                   self.piece(0)
-
-
-
-
+        metainfo = "comment: " + self.comment() + "\n" +\
+                   "announce: " + self.announce() + "\n" +\
+                   "info_hash: " + self.info_hash()+"\n" +\
+                   "file_name: " + self.file_name()+"\n" +\
+                   "piece_length: " + self.piece_length()+"\n" +\
+                   "file_length: " + self.file_length()+"\n" +\
+                   "pieces: " + str(self.pieces())+"\n" +\
+                   "created_by: " + self.created_by()+"\n" +\
+                   "creation_date: " + self.creation_date()+"\n" +\
+                   "num_pieces: " + self.num_pieces()+"\n" +\
+                   "piece 0: " + self.piece(0)
         return metainfo
 
 

@@ -3,12 +3,13 @@ Lab 6: peer.py
 This file contains a basic template of the Peer class.
 """
 
-from server import *  # assumes that your server file is in this folder
-from client import *  # assumes that your client file is in this folder
-from tracker import *  # assumes that your Tracker file is in this folder
-from torrent import *  # assumes that your Torrent file is in this folder
+from Labs.lab6.server import *  # assumes that your server file is in this folder
+from Labs.lab6.client import *  # assumes that your client file is in this folder
+from Labs.lab6.tracker import *  # assumes that your Tracker file is in this folder
+from Labs.lab6.torrent import *  # assumes that your Torrent file is in this folder
 from threading import Thread
 import uuid
+
 
 
 class Peer:

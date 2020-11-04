@@ -61,7 +61,10 @@ class Tracker:
         TODO: implement the ping method. 
         :return:
         """
-        pass
+        pingQuery = {"t": t, "y": y, "q": "ping", "a": a, "r": r}
+        data = self.encode(pingQuery)
+        self._server.send(data)
+
 
     def find_node(self, t, y, a=None, r=None):
         """
