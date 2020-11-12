@@ -69,9 +69,8 @@ class Tracker:
                     data = self.decode(raw_data)
                     ip_sender = sender_ip_and_port[0]
                     port_sender = sender_ip_and_port[1]
-
+                    print(data)
                     self.process_query(data['q'], ip_sender, port_sender)
-
                     print("data received by sender", data, ip_sender, port_sender)
         except:
             print("Error listening at DHT port")
@@ -197,9 +196,9 @@ class Tracker:
 
             # TEST.....
             self.ping("aa", "q")
-            time.sleep(5)
+            time.sleep(2)
             self.find_node('aa', 'q')
-            time.sleep(3)
+            time.sleep(2)
             self.get_peers('aa', 'q')
             time.sleep(3)
             self.announce_peers('aa', 'q')
