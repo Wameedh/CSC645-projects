@@ -143,6 +143,10 @@ class Server(object):
             return None
         return pickle.loads(data_from_client)
 
+
+    def getID(self):
+        return {'ip_address': self.host, 'port': self.port}
+
     def run(self):
         """
         Already implemented for you

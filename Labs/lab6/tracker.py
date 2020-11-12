@@ -36,7 +36,10 @@ class Tracker:
         # {'nodeID': '<the node id is a SHA1 hash of the ip_address and port of the server node and a random uuid>',
         #  'ip_address': '<the ip address of the node>', 'port': '<the port number of the node',
         #  'info_hash': '<the info hash from the torrent file>', last_changed': 'timestamp'}
-        self._routing_table = []
+        self._routing_table = [["127.0.0.1", 12002], ["127.0.0.1", 12003],  ["127.0.0.1", 12004]]
+
+
+
 
     def broadcast(self, message, self_broadcast_enabled=False):
         try:
@@ -63,6 +66,9 @@ class Tracker:
                     data = self.decode(raw_data)
                     ip_sender = sender_ip_and_port[0]
                     port_sender = sender_ip_and_port[1]
+
+                    self.process_query(data['q'], ip_sender, port_sender)
+
                     print("data received by sender", data, ip_sender, port_sender)
         except:
             print("Error listening at DHT port")
@@ -73,7 +79,9 @@ class Tracker:
         :param message: a dictionary representing the message
         :return: the bencoded message
         """
-        return bencodepy.encode(message)
+        bencode_message = bencodepy.encode(message)
+        print("bencoded = ", bencode_message)
+        return bencode_message
 
     def decode(self, bencoded_message):
         """
@@ -100,50 +108,81 @@ class Tracker:
         # pass the dictionary
         # ip = {'ip_address': self.host, 'port': self.port}
         # ping Query = {"t":"aa", "y":"q", "q":"ping", "a":{"id":"abcdefghij0123456789"}}
-        id = self._torrent.info_hash()
-        ping_Query = {"t": t, "y": y, "q": "ping", "a": {"id": id}}
+        encoded_id = self.get_encoded_ID()
+        #hashed_id = self._torrent._hash_torrent_info(encoded_id)
+        ping_Query = {"t": t, "y": y, "q": "ping", "a": {"id": encoded_id}}
+
+        print("ping Query = ", ping_Query)
         self.broadcast(ping_Query)
+
+    def get_encoded_ID(self):
+        id = self._server.getID()
+        return bencodepy.encode(id)
 
     def find_node(self, t, y, a=None, r=None):
         """
         TODO: implement the find_node method
         :return:
         """
-        pass
+        """
+        find_node Query = {"t": "aa", "y": "q", "q": "find_node","a": {"id": "abcdefghij0123456789", "target": "mnopqrstuvwxyz123456"}}
+        bencoded = d1:ad2: id20:abcdefghij01234567896: target20:mnopqrstuvwxyz123456e1: q9:find_node1: t2:aa1: y1:qe
+        """
+        encoded_id = self.get_encoded_ID()
+        find_node_Query = {"t": t, "y": y, "q": "find_node","a": {"id": encoded_id, "target": ["127.0.0.1", 5000]}}
+        print("find_node Query = ", find_node_Query)
+        self.broadcast(find_node_Query)
 
     def get_peers(self, t, y, a=None, r=None):
         """
         TODO: implement the get_peers method
         :return:
         """
-        pass
+        encoded_id = self.get_encoded_ID()
+        get_peers_Query = {"t": t, "y": y, "q": "get_peers", "a": {"id": encoded_id, "info_hash": self._torrent.info_hash()}}
+        print("get_peers Query = ", get_peers_Query)
+        self.broadcast(get_peers_Query)
+
 
     def announce_peers(self, t, y, a=None, r=None):
         """
         TODO: implement the announce_peers method
         :return:
         """
-        pass
+        encoded_id = self.get_encoded_ID()
+        announce_peers_Query = {"t": t, "y": y, "q": "announce_peer", "a": {"id": encoded_id, "implied_port": 1, "info_hash": self._torrent.info_hash(), "port": 6881, "token": "aoeusnth"}}
+        print("announce_peers Query = ", announce_peers_Query)
+        self.broadcast(announce_peers_Query)
 
-    def process_query(self):
+    def process_query(self, query, ip, prot):
         """
         TODO: process an incoming query from a node
         :return: the response
         """
-        pass
-
-    def send_response(self):
-        """
-        TODO: send a response to a specific node
-        :return:
-        """
-        pass
+        # id = query[b'a'][b'id']
+        #
+        # ip_address = id['a']['id']
+        # port =
+        encoded_id = self.get_encoded_ID()
+        if query == 'ping':
+            ping_response = {"t": "aa", "y": "q", "q": "ping", "a": {"id": encoded_id}}
+            self.send_udp_message(ping_response, ip, prot)
+        elif query == 'find_node':
+            find_node_response = {"t": "aa", "y": "r", "r": {"id": encoded_id, "nodes": self._torrent.nodes()}}
+            self.send_udp_message(find_node_response, ip, prot)
+        elif query == 'get_peers':
+            response_with_peers = {"t":"aa", "y": "r", "r": {"id": encoded_id, "token": "aoeusnth", "values": ["axje.u", "idhtnm"]}}
+            self.send_udp_message(response_with_peers, ip, prot)
+        elif query == 'announce_peers':
+            response_announce_peers = {"t": "aa", "y": "r", "r": {"id": encoded_id}}
+            self.send_udp_message(response_announce_peers, ip, prot)
 
     def run(self, start_with_broadcast=True):
         """
         TODO: This function is called from the peer.py to start this tracker
         :return: VOID
         """
+
         if self._is_announce:
             threading.Thread(target=self.broadcast_listerner).start()
         else:
@@ -153,6 +192,18 @@ class Tracker:
             # message = "Anyone listening in DHT port?"
             # self.broadcast(message, self_broadcast_enabled=True)
             self.ping("aa", "q")
+
+            # message = self.ping('aa', 'q')
+            # self.broadcast(message, self_broadcast_enabled=True)
+            # time.sleep(1)
+            # message = self.find_node('aa', 'q')
+            # self.broadcast(message, self_broadcast_enabled=True)
+            # time.sleep(1)
+            # message = self.get_peers('aa', 'q')
+            # self.broadcast(message, self_broadcast_enabled=True)
+            # time.sleep(1)
+            # message = self.announce_peer('aa', 'q')
+            # self.broadcast(message, self_broadcast_enabled=True)
 
 
 # tracker = Tracker(None, Torrent("age.torrent"))

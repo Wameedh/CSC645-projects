@@ -13,6 +13,7 @@ class Torrent:
     def __init__(self, torrent_path):
         self.torrent_path = torrent_path
         self.torrent_data = tp.parse_torrent_file(torrent_path)
+        print(self.torrent_data)
 
     def comment(self):
         """
@@ -62,7 +63,7 @@ class Torrent:
         TODO: This method extracts the nodes from the torrent file
         :return: the nodes list
         """
-        return self.torrent_data['nodes']
+        return self.torrent_data['announce-list']
 
     def creation_date(self):
         """

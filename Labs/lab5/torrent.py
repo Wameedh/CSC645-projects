@@ -39,6 +39,7 @@ class Torrent:
         :return: the SHA1 hash of the torrent info
         """
         torrent_info = repr(self.torrent_data['info']).encode('utf-8')
+        print(self.torrent_data)
         hashed_info = self._hash_torrent_info(torrent_info)
         return hashed_info
 
@@ -62,7 +63,7 @@ class Torrent:
         TODO: This method extracts the nodes from the torrent file
         :return: the nodes list
         """
-        return self.torrent_data['nodes']
+        return self.torrent_data['announce-list']
 
     def creation_date(self):
         """
