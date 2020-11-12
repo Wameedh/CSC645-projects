@@ -34,7 +34,7 @@ class Server(object):
         self.host = host
         self.port = port
         self.serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # TODO: create the server socket
-        self.client_handlers = {} # initializes client_handlers list
+        self.client_handlers = [] # initializes client_handlers list
 
     def _bind(self):
         """
@@ -88,6 +88,7 @@ class Server(object):
         while True:
             try:
                clienthandler, addr = self.serversocket.accept()
+
                # TODO: from the addr variable, extract the client id assigned to the client
                # TODO: send assigned id to the new client. hint: call the send_clientid(..) method
                client_id = addr[1]
