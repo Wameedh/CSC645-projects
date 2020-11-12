@@ -179,7 +179,7 @@ class Tracker:
             response_announce_peers = {"t": "aa", "y": "r", "r": {"id": encoded_id}}
             self.send_udp_message(response_announce_peers, ip, prot)
 
-    def run(self, start_with_broadcast=True):
+    def run(self, start_with_broadcast=False):
         """
         TODO: This function is called from the peer.py to start this tracker
         :return: VOID

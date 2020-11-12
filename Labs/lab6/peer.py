@@ -61,7 +61,7 @@ class Peer:
         """
         try:
             if self.server:
-                self.tracker = Tracker(self.server, self.torrent, None)
+                self.tracker = Tracker(self.server, self.torrent, True)
                 Thread(target=self.tracker.run, daemon=False).start()
                 print("Tracker running.....")
         except Exception as error:
