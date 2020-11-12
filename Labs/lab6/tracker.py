@@ -3,6 +3,9 @@
 # SID: 920678405
 # Date: <the date when this file was last updated/created/edited>
 # Description: this file contains the implementation of the tracker class.
+
+import time # for testing
+
 import bencodepy
 import socket
 import threading
@@ -191,14 +194,22 @@ class Tracker:
         if start_with_broadcast:
             # message = "Anyone listening in DHT port?"
             # self.broadcast(message, self_broadcast_enabled=True)
+
+            # TEST.....
             self.ping("aa", "q")
+            time.sleep(5)
+            self.find_node('aa', 'q')
+            time.sleep(3)
+            self.get_peers('aa', 'q')
+            time.sleep(3)
+            self.announce_peers('aa', 'q')
 
             # message = self.ping('aa', 'q')
             # self.broadcast(message, self_broadcast_enabled=True)
-            # time.sleep(1)
+            #time.sleep(2)
             # message = self.find_node('aa', 'q')
             # self.broadcast(message, self_broadcast_enabled=True)
-            # time.sleep(1)
+            # time.sleep(2)
             # message = self.get_peers('aa', 'q')
             # self.broadcast(message, self_broadcast_enabled=True)
             # time.sleep(1)
