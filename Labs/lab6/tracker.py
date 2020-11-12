@@ -70,8 +70,8 @@ class Tracker:
                     ip_sender = sender_ip_and_port[0]
                     port_sender = sender_ip_and_port[1]
                     print(data)
-                    self.process_query(data['q'], ip_sender, port_sender)
-                    print("data received by sender", data, ip_sender, port_sender)
+                    print("data received by sender", ip_sender, port_sender)
+                    self.process_query(data[b'q'], ip_sender, port_sender)
         except:
             print("Error listening at DHT port")
 
@@ -179,7 +179,7 @@ class Tracker:
             response_announce_peers = {"t": "aa", "y": "r", "r": {"id": encoded_id}}
             self.send_udp_message(response_announce_peers, ip, prot)
 
-    def run(self, start_with_broadcast=False):
+    def run(self, start_with_broadcast=True):
         """
         TODO: This function is called from the peer.py to start this tracker
         :return: VOID
