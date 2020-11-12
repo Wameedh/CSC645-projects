@@ -13,7 +13,6 @@ class Torrent:
     def __init__(self, torrent_path):
         self.torrent_path = torrent_path
         self.torrent_data = tp.parse_torrent_file(torrent_path)
-        print(self.torrent_data)
 
     def comment(self):
         """

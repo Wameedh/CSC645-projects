@@ -29,7 +29,7 @@ class Peer:
     LEECHER = 'leecher'
     SEEDER = 'seeder'
 
-    def __init__(self, role=SEEDER, server_ip_address='127.0.0.1'):
+    def __init__(self, role=SEEDER, server_ip_address='0.0.0.0'):
         """
         Class constructor
         :param server_ip_address: used when need to use the ip assigned by LAN
@@ -61,7 +61,7 @@ class Peer:
         """
         try:
             if self.server:
-                self.tracker = Tracker(self.server, self.torrent, None)
+                self.tracker = Tracker(self.server, self.torrent, True)
                 Thread(target=self.tracker.run, daemon=False).start()
                 print("Tracker running.....")
         except Exception as error:

@@ -25,7 +25,7 @@ class Server(object):
     """
     MAX_NUM_CONN = 10 # keeps 10 clients in queue
 
-    def __init__(self, host="127.0.0.1", port = 12000):
+    def __init__(self, host='0.0.0.0', port = 5000):
         """
         Class constructor
         :param host: by default localhost. Note that '0.0.0.0' takes LAN ip address.
