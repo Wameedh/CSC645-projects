@@ -1,6 +1,7 @@
 # file:           message.py
-# Author:         <your name here>
-# Date:           04/24/2020
+# Author:         Wameedh Mohammed Ali
+# ID:             920678405
+# Date:           11/19/2020
 # Description:    This file contains the Message and Lab7UnitTests classes.
 # Purpose:        Lab 7 CSC645 Computer Networks SFSU
 # Imports needed: math, bitarray and unittest
@@ -103,7 +104,7 @@ class Message:
         #            The len of the message. Assuming we use the default pstr in the handshake message, then the
         #            default value for pstr is 19
         #
-        self.handshake = {'info_hash':None, 'peer_id':0, 'pstr':self.PSTR, 'pstrlen':self.PSTRLEN}
+        self.handshake = {'info_hash': None, 'peer_id': 0, 'pstr': self.PSTR, 'pstrlen': self.PSTRLEN}
 
         #  Tracker requests have the following keys:
         #      info_hash
@@ -165,17 +166,24 @@ class Message:
             # create a bitarray (piece) of 8 bits size
             # set all the bits to 0 (missing piece)
             # add the new piece to the bitfield (self._bitfield['bitfield])
-            pass
+            piece = '00000000'
+            barray = bitarray(piece)  # Set them to missing
+            self._bitfield['bitfield'].append(barray)
+
         # create a new bitarray (piece) of spare bits size
         # # set all the bits to 0 (missing piece)
         # add the new piece to the bitfield (self._bitfield['bitfield])
+        barray = bitarray(spare_bits)  # Initaalize spare bits
+        barray.setall(0)
+        self._bitfield['bitfield'].append(barray)
 
     def get_bitfield(self):
         """
         TODO: get the bitfield payload
         :return: the bitfield payload 
         """
-        pass # your code here
+        bitfield = self._bitfield['bitfield']
+        return bitfield
 
     def get_bitfield_piece(self, piece_index):
         """
@@ -183,7 +191,9 @@ class Message:
         :param piece_index:
         :return: the piece bitfield located at index 'piece_index'
         """
-        pass # your code here
+        bitfield = self.get_bitfield()
+        piece = bitfield[piece_index]
+        return piece
 
     def get_bitfield_block(self, piece_index, block_index):
         """
@@ -192,7 +202,9 @@ class Message:
         :param block_index:
         :return: the block bit located at index 'block_index'
         """
-        pass # your code here
+        piece = self.get_bitfield_piece(piece_index)
+        block = piece[block_index]
+        return block
 
     def is_block_missing(self, piece_index, block_index):
         """
@@ -201,7 +213,11 @@ class Message:
         :param block_index:
         :return: True if the block is missing. Otherwise, returns False
         """
-        pass # your code here
+        block = self.get_bitfield_block(piece_index, block_index)
+        if block == b'0':
+            return True
+        else:
+            return False
 
     def is_piece_missing(self, piece_index):
         """
@@ -209,7 +225,12 @@ class Message:
         :param piece_index:
         :return: True if the piece is missing. Otherwise, returns False
         """
-        pass # your code here
+        piece = self.get_bitfield_piece(piece_index)
+        if piece != b'11111111':
+            return True
+        else:
+            return False
+
 
     def next_missing_block_index(self, piece_index):
         """
@@ -217,14 +238,26 @@ class Message:
         :param piece_index:
         :return: the next missing block index
         """
-        pass # your code here
+        piece = self.get_bitfield_piece(piece_index)
+        block_index = 0
+        for block in piece:
+            if block == 0:
+                return block_index
+            block_index += 1
+        return None
 
     def next_missing_piece_index(self):
         """
         TODO: finds the next missing piece
         :return: the next missing piece index
         """
-        pass # your code here
+        bitfield = self.get_bitfield()
+        piece_index = 0
+        for piece in bitfield:
+            if piece != b'11111111':
+                return piece_index
+            piece_index += 1
+        return None
 
     def set_block_to_completed(self, piece_index, block_index):
         """
@@ -233,7 +266,9 @@ class Message:
         :param block_index:
         :return: VOID
         """
-        pass # your code here
+        block = b'1'
+        self._bitfield['bitfield'][piece_index][block_index] = block
+
 
 # This is a unit test class to test your code, please do not modify it. 
 class Lab7UnitTests(unittest.TestCase):
