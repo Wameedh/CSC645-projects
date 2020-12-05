@@ -11,6 +11,7 @@ from server import Server  # assumes that your server file is in this folder
 from client import Client  # assumes that your client file is in this folder
 from tracker import Tracker  # assumes that your Tracker file is in this folder
 from torrent import Torrent  # assumes that your Torrent file is in this folder
+from threading import Thread
 import uuid
 
 
@@ -36,7 +37,7 @@ class Peer:
         self.server_ip_address = server_ip_address
         self.id = uuid.uuid4()  # creates unique id for the peer
         self.role = role
-        self.torrent = Torrent()
+        self.torrent = Torrent("age.torrent")
         self.tracker = None
 
     def run_server(self):
@@ -65,7 +66,7 @@ class Peer:
         except Exception as error:
             print(error)  # server failed to run
 
-    def _connect_to_peer(self, client_port_to_bind, peer_ip_address):
+    def _connect_to_peer(self, client_port_to_bind, peer_ip_address, peer_port = 5000):
         """
         TODO: * Create a new client object and bind the port given as a
               parameter to that specific client. Then use this client
@@ -78,10 +79,18 @@ class Peer:
                                 the client needs to connect to
         :return: VOID
         """
+        client = Client()
         try:
-            pass  # your code here
-        except:
-            pass  # handle exceptions here
+            client.bind('127.0.0.1', client_port_to_bind)
+            print(peer_ip_address)
+            print(peer_port)
+            Thread(target=client.connect, args=(peer_ip_address, peer_port)).start()
+            return True
+        except Exception as error:
+            print(error)
+            client.close()
+            return False
+
 
     def connect(self, peers_ip_addresses):
         """
@@ -93,14 +102,24 @@ class Peer:
         :param peers: list of peer´s ip addresses in the network
         :return: VOID
         """
-        pass  # your code here
+        client_port = self.CLIENT_MIN_PORT_RANGE
+        default_peer_port = self.SERVER_PORT
+        for peer_ip in peers_ip_addresses:
+            if client_port > self.CLIENT_MAX_PORT_RANGE:
+                break
+            if "/" in peer_ip:
+                ip_and_port = peer_ip.split("/")
+                peer_ip = ip_and_port[0]
+                default_peer_port = int(ip_and_port[1])
+            if self._connect_to_peer(client_port, peer_ip, default_peer_port):
+                client_port += 1
 
 
 # testing
-peer = Peer(role='peer')
+peer = Peer(role='seeder')
 print("Peer: " + str(peer.id) + " running its server: ")
 peer.run_server()
-#print("Peer: " + str(peer.id) + " running its clients: ")
+print("Peer: " + str(peer.id) + " running its clients: ")
 # Two ways of testing this:
 #  Locally (same machine):
 #      1. Run two peers in the same machine using different ports. Comment out the next three lines (only servers run)

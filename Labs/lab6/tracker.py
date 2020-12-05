@@ -193,7 +193,6 @@ class Tracker:
         if start_with_broadcast:
             # message = "Anyone listening in DHT port?"
             # self.broadcast(message, self_broadcast_enabled=True)
-
             # TEST.....
             self.ping("aa", "q")
             time.sleep(2)
