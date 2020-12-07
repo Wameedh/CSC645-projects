@@ -1,3 +1,7 @@
+# Instructor Note
+
+Sadly, extra-credit is only given for labs that run without errors. I got errors when I was testing your lab 
+
 # Lab 8: P2P Uploading and Downloading Data 
 Before moving to the uploading and downloading concepts in this lab, it is important to understand that in a P2P network 
 peers are client and servers at the same time. Once this concept is clear, we can explain how uploading and downloading 
